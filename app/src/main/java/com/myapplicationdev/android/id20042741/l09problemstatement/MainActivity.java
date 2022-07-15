@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 int selectedID = starsRG.getCheckedRadioButtonId();
+                Toast.makeText(MainActivity.this, String.format("%d", selectedID), Toast.LENGTH_SHORT).show();
                 starRB = (RadioButton) findViewById(selectedID);
                 Toast.makeText(MainActivity.this,
                         starRB.getText(), Toast.LENGTH_SHORT).show();
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Successfully inserted a new record!", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
             }
         });
 
