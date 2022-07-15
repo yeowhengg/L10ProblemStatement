@@ -1,6 +1,8 @@
 package com.myapplicationdev.android.id20042741.l09problemstatement;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
     private int _id;
     private String title;
     private String singer;
