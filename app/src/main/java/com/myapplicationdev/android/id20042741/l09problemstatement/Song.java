@@ -33,4 +33,13 @@ public class Song {
     public int getStars(){
         return this.stars;
     }
+
+    public String toString(){
+        String symbol = "";
+        for(int i = 0; i < this.stars; i++){
+            symbol += "*";
+        }
+        return this.getTitle() + "\n" + this.singer + " - " + this.year + "\n" + symbol;
+    }
+
 }

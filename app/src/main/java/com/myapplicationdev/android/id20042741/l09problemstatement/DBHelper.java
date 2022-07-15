@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ndpsongs.db";
@@ -52,29 +54,29 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public String getAllData(){
+    public ArrayList<Song> getAllData(){
         SQLiteDatabase db = this.getReadableDatabase();
         String[] column = {COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
         Cursor cursor = db.query(TABLE_SONG, column, null, null, null, null, null, null);
-        String output = "";
+        ArrayList<Song> alSong = new ArrayList<Song>();
         if(cursor.moveToFirst()){
             do{
-                Log.i("info", output);
                 String title = cursor.getString(0);
                 String singer = cursor.getString(1);
                 int year = cursor.getInt(2);
                 int stars = cursor.getInt(3);
-                output += String.format("%s\n%s\n%d\n%d\n---\n",title, singer, year, stars);
+                Song song = new Song(title, singer, year, stars);
+                alSong.add(song);
             }while(cursor.moveToNext());
         }
 
         cursor.close();
         db.close();
 
-        return output;
+        return alSong;
     }
 
-    public int insertData(String title, String singer, int year, int stars){
+    public long insertData(String title, String singer, int year, int stars){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
@@ -82,6 +84,6 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_YEAR, year);
         values.put(COLUMN_STARS, stars);
         long result = db.insert(TABLE_SONG, null, values);
-        return (int) result;
+        return result;
     }
 }
