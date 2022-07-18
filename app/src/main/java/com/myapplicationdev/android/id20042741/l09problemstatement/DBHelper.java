@@ -117,29 +117,35 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
      public ArrayList<Song> filterByYear (String filteredYear){
-        ArrayList<Song> alFilteredSong = new ArrayList<Song>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
-        String conditions = COLUMN_YEAR + "= ?";
-        String[] args = {filteredYear};
-        Cursor cursor = db.query(TABLE_SONG, columns, conditions, args, null, null, null, null);
 
-        if(cursor.moveToFirst()){
-            do{
-                int id = cursor.getInt(0);
-                String title = cursor.getString(1);
-                String singer = cursor.getString(2);
-                int year = cursor.getInt(3);
-                int stars = cursor.getInt(4);
+        if(filteredYear.equalsIgnoreCase("ALL YEAR")){
+            return get5stars(false);
+        }else{
+            ArrayList<Song> alFilteredSong = new ArrayList<Song>();
+            SQLiteDatabase db = this.getReadableDatabase();
+            String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
+            String conditions = COLUMN_YEAR + "= ?";
+            String[] args = {filteredYear};
+            Cursor cursor = db.query(TABLE_SONG, columns, conditions, args, null, null, null, null);
 
-                Song song = new Song(id, title, singer, year, stars);
-                alFilteredSong.add(song);
+            if(cursor.moveToFirst()){
+                do{
+                    int id = cursor.getInt(0);
+                    String title = cursor.getString(1);
+                    String singer = cursor.getString(2);
+                    int year = cursor.getInt(3);
+                    int stars = cursor.getInt(4);
 
-            }while(cursor.moveToNext());
+                    Song song = new Song(id, title, singer, year, stars);
+                    alFilteredSong.add(song);
+
+                }while(cursor.moveToNext());
+            }
+
+            cursor.close();
+            db.close();
+            return alFilteredSong;
         }
 
-        cursor.close();
-        db.close();
-        return alFilteredSong;
      }
 }

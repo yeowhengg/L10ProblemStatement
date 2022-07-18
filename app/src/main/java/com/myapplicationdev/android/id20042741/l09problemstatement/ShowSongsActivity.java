@@ -2,6 +2,7 @@ package com.myapplicationdev.android.id20042741.l09problemstatement;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.icu.text.IDNA;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ Spinner spinnerYear;
 ArrayAdapter<String> saYear;
 Boolean filter = false;
 String[] allYear;
+Boolean firstHit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ String[] allYear;
                 DBHelper db = new DBHelper(ShowSongsActivity.this);
                 alSong = db.filterByYear((String) parent.getItemAtPosition(position));
                 aaSong = new ArrayAdapter<Song>(ShowSongsActivity.this, android.R.layout.simple_list_item_1, alSong);
+                Toast.makeText(ShowSongsActivity.this, String.valueOf(alSong.get(0).getYear()), Toast.LENGTH_SHORT).show();
                 lvShowSongs.setAdapter(aaSong);
                 aaSong.notifyDataSetChanged();
             }
@@ -93,9 +96,10 @@ String[] allYear;
     }
 
     public void spinnerSetYear(){
-        allYear = new String[alSong.size()];
-        for(int i = 0; i < allYear.length; i++){
-            allYear[i] = String.format("%d",alSong.get(i).getYear());
+        allYear = new String[alSong.size() + 1];
+        allYear[0] = "ALL YEAR";
+        for(int i = 1; i < allYear.length; i++){
+            allYear[i] = String.format("%d",alSong.get(i-1).getYear());
         }
         saYear = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, allYear);
         spinnerYear.setAdapter(saYear);

@@ -22,7 +22,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/etSongID"
         android:inputType="none"
-        android:textIsSelectable="true">
+        android:textIsSelectable="false"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+       >
 
     </EditText>
 
