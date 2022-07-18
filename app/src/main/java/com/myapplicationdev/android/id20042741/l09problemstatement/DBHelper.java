@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -147,5 +148,24 @@ public class DBHelper extends SQLiteOpenHelper {
             return alFilteredSong;
         }
 
+     }
+
+     public ArrayList<String> returnDistinctYear (){
+
+        ArrayList<String> alDisYear = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"year"};
+        String sql = "SELECT DISTINCT year FROM song";
+        Cursor cursor = db.query(true, TABLE_SONG, columns, null, null, null ,null, null, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                int year = cursor.getInt(0);
+                alDisYear.add(String.valueOf(year));
+            }while(cursor.moveToNext());
+        }
+
+         return alDisYear;
      }
 }

@@ -27,7 +27,7 @@ Button btnFilter;
 Spinner spinnerYear;
 ArrayAdapter<String> saYear;
 Boolean filter = false;
-String[] allYear;
+ArrayList<String> allYear;
 Boolean firstHit = true;
 
     @Override
@@ -73,7 +73,6 @@ Boolean firstHit = true;
                 aaSong.notifyDataSetChanged();
                 if(alSong.isEmpty()) Toast.makeText(ShowSongsActivity.this, "Nothing to display", Toast.LENGTH_SHORT).show();
 
-
                 filter = !filter;
             }
         });
@@ -96,11 +95,10 @@ Boolean firstHit = true;
     }
 
     public void spinnerSetYear(){
-        allYear = new String[alSong.size() + 1];
-        allYear[0] = "ALL YEAR";
-        for(int i = 1; i < allYear.length; i++){
-            allYear[i] = String.format("%d",alSong.get(i-1).getYear());
-        }
+        DBHelper db = new DBHelper(ShowSongsActivity.this);
+        allYear = new ArrayList<String>();
+        allYear = db.returnDistinctYear();
+        allYear.add(0, "ALL YEAR");
         saYear = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, allYear);
         spinnerYear.setAdapter(saYear);
     }
