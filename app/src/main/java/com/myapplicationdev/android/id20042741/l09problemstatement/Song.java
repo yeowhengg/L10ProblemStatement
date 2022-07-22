@@ -42,7 +42,7 @@ public class Song implements Serializable {
         for(int i = 0; i < this.stars; i++){
             symbol += "*";
         }
-        return this.getTitle() + "\n" + this.singer + " - " + this.year + "\n" + symbol;
+        return " " + symbol;
     }
 
 }

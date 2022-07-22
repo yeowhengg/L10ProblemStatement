@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ShowSongsActivity extends AppCompatActivity {
 ListView lvShowSongs;
-ArrayAdapter<Song> aaSong;
+CustomAdapter aaSong;
 ArrayList<Song> alSong;
 Button btnFilter;
 Spinner spinnerYear;
@@ -43,7 +43,7 @@ Boolean firstHit = true;
         DBHelper db = new DBHelper(ShowSongsActivity.this);
         alSong = new ArrayList<Song>();
         alSong = db.get5stars(filter);
-        aaSong = new ArrayAdapter<Song>(ShowSongsActivity.this, android.R.layout.simple_list_item_1, alSong);
+        aaSong = new CustomAdapter(this, R.layout.row, alSong);
         lvShowSongs.setAdapter(aaSong);
 
         spinnerSetYear();
@@ -68,7 +68,7 @@ Boolean firstHit = true;
 
                 DBHelper db = new DBHelper(ShowSongsActivity.this);
                 alSong = db.get5stars(filter);
-                aaSong = new ArrayAdapter<Song>(ShowSongsActivity.this, android.R.layout.simple_list_item_1, alSong);
+                aaSong = new CustomAdapter(ShowSongsActivity.this, R.layout.row, alSong);
                 lvShowSongs.setAdapter(aaSong);
                 aaSong.notifyDataSetChanged();
                 if(alSong.isEmpty()) Toast.makeText(ShowSongsActivity.this, "Nothing to display", Toast.LENGTH_SHORT).show();
@@ -82,7 +82,7 @@ Boolean firstHit = true;
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 DBHelper db = new DBHelper(ShowSongsActivity.this);
                 alSong = db.filterByYear((String) parent.getItemAtPosition(position));
-                aaSong = new ArrayAdapter<Song>(ShowSongsActivity.this, android.R.layout.simple_list_item_1, alSong);
+                aaSong = new CustomAdapter(ShowSongsActivity.this, R.layout.row, alSong);
                 Toast.makeText(ShowSongsActivity.this, String.valueOf(alSong.get(0).getYear()), Toast.LENGTH_SHORT).show();
                 lvShowSongs.setAdapter(aaSong);
                 aaSong.notifyDataSetChanged();
