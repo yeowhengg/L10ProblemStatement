@@ -26,9 +26,8 @@ ArrayList<Song> alSong;
 Button btnFilter;
 Spinner spinnerYear;
 ArrayAdapter<String> saYear;
-Boolean filter = false;
+Boolean filter = true;
 ArrayList<String> allYear;
-Boolean firstHit = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +39,10 @@ Boolean firstHit = true;
 
         spinnerYear = findViewById(R.id.spinnerID);
 
-        DBHelper db = new DBHelper(ShowSongsActivity.this);
-        alSong = new ArrayList<Song>();
-        alSong = db.get5stars(filter);
-        aaSong = new CustomAdapter(this, R.layout.row, alSong);
-        lvShowSongs.setAdapter(aaSong);
 
+        alSong = new ArrayList<Song>();
+
+        dynamicRefresh();
         spinnerSetYear();
 
         lvShowSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,11 +62,7 @@ Boolean firstHit = true;
                 } else {
                     btnFilter.setText("SHOW ALL SONG WITH 5 STAR");
                 }
-
-                DBHelper db = new DBHelper(ShowSongsActivity.this);
-                alSong = db.get5stars(filter);
-                aaSong = new CustomAdapter(ShowSongsActivity.this, R.layout.row, alSong);
-                lvShowSongs.setAdapter(aaSong);
+                dynamicRefresh();
                 aaSong.notifyDataSetChanged();
                 if(alSong.isEmpty()) Toast.makeText(ShowSongsActivity.this, "Nothing to display", Toast.LENGTH_SHORT).show();
 
@@ -83,9 +76,17 @@ Boolean firstHit = true;
                 DBHelper db = new DBHelper(ShowSongsActivity.this);
                 alSong = db.filterByYear((String) parent.getItemAtPosition(position));
                 aaSong = new CustomAdapter(ShowSongsActivity.this, R.layout.row, alSong);
-                Toast.makeText(ShowSongsActivity.this, String.valueOf(alSong.get(0).getYear()), Toast.LENGTH_SHORT).show();
                 lvShowSongs.setAdapter(aaSong);
                 aaSong.notifyDataSetChanged();
+                String currYear = (String) parent.getItemAtPosition(position);
+
+                if(!currYear.equalsIgnoreCase("ALL YEAR") && filter){
+                    btnFilter.setText("SHOW ALL SONG");
+                    filter = false;
+                }else{
+                    btnFilter.setText("SHOW ALL SONG WITH 5 STARS");
+                    filter = true;
+                }
             }
 
             @Override
@@ -112,6 +113,13 @@ Boolean firstHit = true;
             msg = retrMsg.getString("msg", "-");
         }
         Toast.makeText(ShowSongsActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void dynamicRefresh(){
+        DBHelper db = new DBHelper(ShowSongsActivity.this);
+        alSong = db.get5stars(filter);
+        aaSong = new CustomAdapter(this, R.layout.row, alSong);
+        lvShowSongs.setAdapter(aaSong);
     }
 
 }
